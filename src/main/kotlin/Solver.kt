@@ -1,10 +1,10 @@
 import TrainEvent.TrainFinish
 import TrainEvent.TrainStart
-import java.util.PriorityQueue
+import kotlin.math.max
 
 class Solver {
     private val dynamic = HashMap<Int, Int>()
-    private val heap = PriorityQueue<Int>(1) { a, b -> b - a }
+    private var maximum: Int = 0
 
     fun solve(trains: List<Train>): Int {
         val events = trains
@@ -23,16 +23,12 @@ class Solver {
                     }
                 }
             )
-        heap.add(0)
         events.forEach {
             when (it) {
-                is TrainStart -> dynamic[it.number] = it.cost + heap.peek()
-                is TrainFinish -> heap.add(dynamic[it.number])
+                is TrainStart -> dynamic[it.number] = it.cost + maximum
+                is TrainFinish -> maximum = max(maximum, dynamic[it.number]!!)
             }
         }
-        return dynamic.values.max()!!.also {
-            heap.clear()
-            dynamic.clear()
-        }
+        return maximum
     }
 }

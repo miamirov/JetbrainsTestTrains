@@ -25,28 +25,14 @@ class Solver {
             )
         heap.add(0)
         events.forEach {
-            if (it is TrainStart) {
-                dynamic[it.number] = it.cost + heap.peek()
+            when (it) {
+                is TrainStart -> dynamic[it.number] = it.cost + heap.peek()
+                is TrainFinish -> heap.add(dynamic[it.number])
             }
-            if (it is TrainFinish)
-                heap.add(dynamic[it.number])
         }
         return dynamic.values.max()!!.also {
             heap.clear()
             dynamic.clear()
         }
     }
-}
-
-fun main() {
-    print(
-        Solver().solve(
-            listOf(
-                Train(4, 34, 19, 1000),
-                Train(3, 34, 20, 1021),
-                Train(2, 12, 11, 600),
-                Train(1, 12, 11, 570)
-            )
-        )
-    )
 }

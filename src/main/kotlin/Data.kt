@@ -6,5 +6,3 @@ sealed class TrainEvent {
     data class TrainStart(val number: Int, override val time: Int, val cost: Int) : TrainEvent()
     data class TrainFinish(val number: Int, override val time: Int) : TrainEvent()
 }
-
-
